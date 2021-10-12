@@ -6,6 +6,14 @@ using UnityEngine;
 public class Projectile : CauseDamage
 {
     public int projectileSpeed;
+    public float selfDestroyTime;
+    private ParticleSystem particle;
+
+    private void Start()
+    {
+        Destroy(gameObject, selfDestroyTime);
+        particle = GetComponentInChildren<ParticleSystem>();
+    }
 
     public void Setup()
     {
@@ -15,9 +23,11 @@ public class Projectile : CauseDamage
 
     private void OnCollisionEnter(Collision collision)
     {
-        ParticleSystem particle = GetComponentInChildren<ParticleSystem>();
-        particle.Play();
-        particle.transform.parent = null;
+        if (particle != null)
+        {
+            particle.Play();
+            particle.transform.parent = null;
+        }
         Destroy(gameObject);
 
         if (collision.gameObject.GetComponent<Health>())

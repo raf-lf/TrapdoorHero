@@ -11,7 +11,7 @@ public class Attack : MonoBehaviour
     {
         GameObject shot = Instantiate(projectile);
         shot.transform.position = projectileOrigin.position;
-        shot.transform.LookAt(GameManager.scriptPlayer.aimTarget);
+        shot.transform.LookAt(GameManager.scriptPlayerCamera.aimTarget);
 
         shot.GetComponent<Projectile>().Setup();
 

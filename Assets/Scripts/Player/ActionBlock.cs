@@ -7,12 +7,12 @@ public class ActionBlock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameManager.scriptPlayer.anim.SetBool("blocking", true);
+        GameManager.scriptPlayerCamera.anim.SetBool("blocking", true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        GameManager.scriptPlayer.anim.SetBool("blocking", false);
+        GameManager.scriptPlayerCamera.anim.SetBool("blocking", false);
     }
 
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class GameManager
 {
-    public static PlayerCamera scriptPlayer;
+    public static PlayerCamera scriptPlayerCamera;
+    public static Player scriptPlayer;
+    public static Hud scriptHud;
 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AttackType { Player, Basic, Piercing, Dangerous }
+public enum AttackType { Player, Basic, Piercing, Heavy }
 
 public abstract class CauseDamage : MonoBehaviour
 {
