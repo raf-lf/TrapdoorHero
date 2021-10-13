@@ -59,7 +59,7 @@ public class Hud : MonoBehaviour
 
         spFill.fillAmount = connectedStamina.sp / connectedStamina.spMax;
         spFeedbackBar.fillAmount = connectedStamina.sp / connectedStamina.spMax;
-        spText.text = "EP " + (int)connectedStamina.sp + "/" + (int)connectedStamina.spMax;
+        spText.text = "SP " + (int)connectedStamina.sp + "/" + (int)connectedStamina.spMax;
 
     }
 

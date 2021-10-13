@@ -7,7 +7,7 @@ public class ActionDodge : MonoBehaviour, IPointerClickHandler,IPointerDownHandl
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.scriptPlayerCamera.anim.SetTrigger("dodge");
+        GameManager.scriptPlayer.Dodge();
     }
 
     public void OnPointerDown(PointerEventData eventData)

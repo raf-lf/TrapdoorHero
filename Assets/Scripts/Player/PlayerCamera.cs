@@ -7,6 +7,9 @@ public class PlayerCamera : MonoBehaviour
     public bool blocking;
     public bool dodging;
 
+    public ParticleSystem vfxMagicWeapon;
+    public ParticleSystem vfxMagicShield;
+
     [HideInInspector]
     public Animator anim;
 
@@ -23,6 +26,17 @@ public class PlayerCamera : MonoBehaviour
     {
         GameManager.scriptPlayer.blocking = blocking;
         GameManager.scriptPlayer.dodging = dodging;
+    }
+
+    public void BuffVfx(ParticleSystem buff, bool apply)
+    {
+        ParticleSystem[] particles = buff.GetComponentsInChildren<ParticleSystem>();
+
+        foreach(ParticleSystem particle in particles)
+        {
+            var emission = particle.emission;
+            emission.enabled = apply;
+        }
     }
 
 }

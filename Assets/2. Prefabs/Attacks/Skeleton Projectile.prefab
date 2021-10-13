@@ -231,7 +231,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2747930668415786176}
   serializedVersion: 7
-  lengthInSec: 2
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 2
   cullingMode: 0
@@ -5111,9 +5111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7e0ca735b173d849a8ccf2847686d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 10
   type: 1
-  projectileSpeed: 50
+  projectileSpeed: 25
   selfDestroyTime: 3
 --- !u!54 &5919186362294888803
 Rigidbody:
@@ -5325,7 +5325,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5441,7 +5441,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
+      scalar: 0.5
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -10322,7 +10322,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1.5
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2

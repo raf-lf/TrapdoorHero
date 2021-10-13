@@ -9,6 +9,8 @@ public class Stamina : MonoBehaviour
     [HideInInspector]
     public float spMax;
     public float spRegen;
+    public float spRegenCooldown = 1;
+    private float spRegenCooldownTargetTime;
 
     private void Awake()
     {
@@ -21,6 +23,7 @@ public class Stamina : MonoBehaviour
 
         if (value < 0)
         {
+            spRegenCooldownTargetTime = Time.time + spRegenCooldown;
 
         }
         if (value > 0)
@@ -34,7 +37,8 @@ public class Stamina : MonoBehaviour
 
     public void Regen()
     {
-        sp += (spRegen * Time.deltaTime);
+        if(Time.time >= spRegenCooldownTargetTime)
+            sp = Mathf.Clamp(sp + spRegen * Time.deltaTime, 0, spMax);
     }
 
     private void Update()
