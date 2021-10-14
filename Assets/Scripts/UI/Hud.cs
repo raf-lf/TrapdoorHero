@@ -9,12 +9,22 @@ public class Hud : MonoBehaviour
     private Health connectedHealth;
     private Stamina connectedStamina;
 
+    [Header("Health")]
     public TextMeshProUGUI hpText;
     public Image hpFill;
     public Image hpFeedbackBar;
+
+    [Header("Stamina")]
     public TextMeshProUGUI spText;
     public Image spFill;
     public Image spFeedbackBar;
+
+    [Header("Buffs")]
+    public TextMeshProUGUI buffSwordDuration;
+    public Image buffSwordFill;
+
+    public TextMeshProUGUI buffShieldDuration;
+    public Image buffShieldFill;
 
     private void Awake()
     {
@@ -60,6 +70,12 @@ public class Hud : MonoBehaviour
         spFill.fillAmount = connectedStamina.sp / connectedStamina.spMax;
         spFeedbackBar.fillAmount = connectedStamina.sp / connectedStamina.spMax;
         spText.text = "SP " + (int)connectedStamina.sp + "/" + (int)connectedStamina.spMax;
+    
+        buffSwordFill.fillAmount = GameManager.scriptPlayer.buffSwordDurationCurrent / GameManager.scriptPlayer.buffSwordDuration;
+        buffSwordDuration.text = (Mathf.RoundToInt(GameManager.scriptPlayer.buffSwordDurationCurrent).ToString());
+
+        buffShieldFill.fillAmount = GameManager.scriptPlayer.buffShieldDurationCurrent / GameManager.scriptPlayer.buffShieldDuration;
+        buffShieldDuration.text = (Mathf.RoundToInt(GameManager.scriptPlayer.buffShieldDurationCurrent).ToString());
 
     }
 

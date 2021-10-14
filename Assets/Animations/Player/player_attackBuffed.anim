@@ -1349,6 +1349,13 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.05
+    functionName: PlaySfx
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: 5d6992c342cce7e4cb5ddea37960b550, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.05
     functionName: ShootAttack
     data: 
     objectReferenceParameter: {fileID: 0}

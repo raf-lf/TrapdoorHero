@@ -20,19 +20,27 @@ public class Projectile : CauseDamage
         GetComponent<Rigidbody>().velocity = projectileSpeed * transform.forward;
 
     }
-
-    private void OnCollisionEnter(Collision collision)
+    
+    public void Impact()
     {
         if (particle != null)
         {
             particle.Play();
             particle.transform.parent = null;
         }
+        if (GetComponentInChildren<PlaySfx>())
+            GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
+
         Destroy(gameObject);
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
         if (collision.gameObject.GetComponent<Health>())
         {
             Damage(collision.gameObject.GetComponent<Health>());
         }
+        Impact();
     }
 }

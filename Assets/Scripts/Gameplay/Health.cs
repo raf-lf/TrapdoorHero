@@ -44,7 +44,11 @@ public class Health : MonoBehaviour
         if (value < 0)
         {
             if (vfxDamage != null)
+            {
                 vfxDamage.Play();
+                if (vfxDamage.GetComponentInChildren<PlaySfx>())
+                    vfxDamage.GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
+            }
 
             if (damagedMaterial != null)
             {
@@ -56,7 +60,11 @@ public class Health : MonoBehaviour
         if (value > 0)
         {
             if (vfxHeal != null)
+            {
                 vfxHeal.Play();
+                if (vfxHeal.GetComponentInChildren<PlaySfx>())
+                    vfxHeal.GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
+            }
         }
 
         hp = Mathf.Clamp(hp + value, 0, hpMax);

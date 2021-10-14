@@ -9,24 +9,33 @@ public class Player : MonoBehaviour
 
     [Header("Block")]
     public bool blocking;
-    public float staminaBlockRatio = 1;
-    private float currentStaminaBlockReduction = 0;
+    public float staminaCostPerDamageBlock = 1;
+    private float staminaCostPerDamageBlockExtra = 0;
+
     public float normalReduction = 1;
     public float piercingReduction = .5f;
     public float heavyReduction = 0f;
-    private float currentExtraReduction = 0;
+    private float modifierReduction = 0;
 
     [Header("Dodge")]
     public int dodgeStaminaCost;
     [HideInInspector]
     public bool dodging;
 
+    [Header("Heal Buff")]
+    public float hpRestored;
+
     [Header("Sword Buff")]
-    public float attackSpeedMultiplier;
+    public float buffSwordDuration = 30;
+    [HideInInspector]
+    public float buffSwordDurationCurrent;
 
     [Header("Shield Buff")]
-    public float buffStaminaBlockReduction = 1;
-    public float buffExtraReduction = 1;
+    public float buffShieldDuration = 30;
+    [HideInInspector]
+    public float buffShieldDurationCurrent;
+    public float buffStaminaCostPerDamageBlock = 1;
+    public float buffDamageReduction = 1;
 
 
     private Health playerHealth;
@@ -56,7 +65,7 @@ public class Player : MonoBehaviour
 
         if (blocking)
         {
-            playerStamina.SpChange((int)((float)-value * Mathf.Clamp((staminaBlockRatio - currentStaminaBlockReduction),0, Mathf.Infinity)));
+            playerStamina.SpChange((int)(-value / Mathf.Clamp((staminaCostPerDamageBlock + staminaCostPerDamageBlockExtra),0, Mathf.Infinity)));
 
             if (playerStamina.sp <= 0)
                 Stagger();
@@ -66,13 +75,12 @@ public class Player : MonoBehaviour
             switch (type)
             {
                 case AttackType.Basic:
-                    return (int)((float)returnedValue * Mathf.Clamp((1 - normalReduction + currentExtraReduction),0, Mathf.Infinity));
+                    return (int)(returnedValue * Mathf.Clamp(1 - (normalReduction + modifierReduction),   0, Mathf.Infinity));
                 case AttackType.Piercing:
-                    return (int)((float)returnedValue * Mathf.Clamp((1 - piercingReduction + currentExtraReduction), 0, Mathf.Infinity));
+                    return (int)(returnedValue * Mathf.Clamp(1 - (piercingReduction + modifierReduction), 0, Mathf.Infinity));
                 case AttackType.Heavy:
-                    return (int)((float)returnedValue * Mathf.Clamp((1 - heavyReduction + currentExtraReduction), 0, Mathf.Infinity));
+                    return (int)(returnedValue * Mathf.Clamp(1 - (heavyReduction + modifierReduction),    0, Mathf.Infinity));
             }
-
 
         }
 
@@ -81,23 +89,34 @@ public class Player : MonoBehaviour
         return returnedValue;
     }
 
-    public void BuffAttack(bool apply)
+    public void BuffHeal()
     {
+        playerHealth.HPChange((int)(playerHealth.hpMax * hpRestored));
+    }
+
+    public void BuffSword(bool apply)
+    {
+        GameManager.scriptHud.buffSwordFill.transform.parent.gameObject.SetActive(apply);
+
+        buffSwordDurationCurrent = buffSwordDuration;
         GameManager.scriptPlayerCamera.anim.SetBool("buffAttack", apply);
         GameManager.scriptPlayerCamera.BuffVfx(GameManager.scriptPlayerCamera.vfxMagicWeapon, apply);
     }
 
     public void BuffShield(bool apply)
     {
+        GameManager.scriptHud.buffShieldFill.transform.parent.gameObject.SetActive(apply);
+
         if (apply)
         {
-            currentStaminaBlockReduction += buffStaminaBlockReduction;
-            currentExtraReduction += buffExtraReduction;
+            buffShieldDurationCurrent = buffShieldDuration;
+            staminaCostPerDamageBlockExtra += buffStaminaCostPerDamageBlock;
+            modifierReduction += buffDamageReduction;
         }
         else
         {
-            currentStaminaBlockReduction -= buffStaminaBlockReduction;
-            currentExtraReduction -= buffExtraReduction;
+            staminaCostPerDamageBlockExtra -= buffStaminaCostPerDamageBlock;
+            modifierReduction -= buffDamageReduction;
         }
 
         GameManager.scriptPlayerCamera.BuffVfx(GameManager.scriptPlayerCamera.vfxMagicShield, apply);
@@ -116,13 +135,39 @@ public class Player : MonoBehaviour
             GameManager.scriptHud.NoSP();
     }
 
-    private void Update()
+    private void UpdateDodgeCollider()
     {
         if (dodging)
             playerCollider.enabled = false;
         else
             playerCollider.enabled = true;
+
     }
 
+    private void DecayBuffs()
+    {
+        if (buffSwordDurationCurrent > 0)
+        {
+            buffSwordDurationCurrent = Mathf.Clamp(buffSwordDurationCurrent -= Time.deltaTime, 0, buffSwordDuration);
+            if (buffSwordDurationCurrent == 0)
+                BuffSword(false);
+        }
+
+        if (buffShieldDurationCurrent > 0)
+        {
+            buffShieldDurationCurrent = Mathf.Clamp(buffShieldDurationCurrent -= Time.deltaTime, 0, buffShieldDuration);
+            if (buffShieldDurationCurrent == 0)
+                BuffShield(false);
+        }
+
+    }
+
+    private void Update()
+    {
+        UpdateDodgeCollider();
+        DecayBuffs();
+    }
+
+   
 
 }

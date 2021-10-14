@@ -84,15 +84,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackSpCost: 0
   blocking: 0
-  staminaBlockRatio: 1
+  staminaCostPerDamageBlock: 1
   normalReduction: 1
   piercingReduction: 0.5
   heavyReduction: 0
-  dodgeStaminaCost: 15
+  dodgeStaminaCost: 5
   dodging: 0
-  attackSpeedMultiplier: 0
-  buffStaminaBlockReduction: 1
-  buffExtraReduction: 1
+  hpRestored: 1
+  buffSwordDuration: 30
+  buffSwordDurationCurrent: 0
+  buffShieldDuration: 30
+  buffShieldDurationCurrent: 0
+  buffStaminaCostPerDamageBlock: 2
+  buffDamageReduction: 2
 --- !u!114 &5551717767085894972
 MonoBehaviour:
   m_ObjectHideFlags: 0
