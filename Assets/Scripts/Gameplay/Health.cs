@@ -24,7 +24,9 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         hpMax = hp;
-        standartMeshMaterial = GetComponentInChildren<MeshRenderer>().material;
+        if (GetComponentInChildren<MeshRenderer>())
+            standartMeshMaterial = GetComponentInChildren<MeshRenderer>().material;
+
         connectedCanvas = GetComponentInChildren<CreatureCanvas>();
     }
 
@@ -84,6 +86,15 @@ public class Health : MonoBehaviour
     public void Death()
     {
         dead = true;
+
+        if (GetComponent<Player>())
+        {
+            GameManager.scriptGameplay.PlayerDeath();
+            GameManager.scriptPlayer.PlayerDeath();
+        }
+        if (GetComponent<Enemy>())
+            GetComponent<Enemy>().EnemyDeath();
+
         gameObject.SetActive(false);
     }
 
@@ -91,15 +102,18 @@ public class Health : MonoBehaviour
     {
         MeshRenderer[] meshes = GetComponentsInChildren<MeshRenderer>();
 
-        foreach (MeshRenderer mesh in meshes)
+        if (meshes != null)
         {
-            mesh.material = damagedMaterial;
-        }
-        yield return new WaitForSeconds(.15f);
+            foreach (MeshRenderer mesh in meshes)
+            {
+                mesh.material = damagedMaterial;
+            }
+            yield return new WaitForSeconds(.15f);
 
-        foreach (MeshRenderer mesh in meshes)
-        {
-            mesh.material = standartMeshMaterial;
+            foreach (MeshRenderer mesh in meshes)
+            {
+                mesh.material = standartMeshMaterial;
+            }
         }
     }
 }

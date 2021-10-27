@@ -5,14 +5,32 @@ using UnityEngine.EventSystems;
 
 public class ActionBlock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameManager.scriptPlayerCamera.anim.SetBool("blocking", true);
+        Block(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        GameManager.scriptPlayerCamera.anim.SetBool("blocking", false);
+        Block(false);
     }
+
+    public void Block(bool on)
+    {
+        if (on && GameManager.scriptPlayer.playerControl)
+            GameManager.scriptPlayerCamera.anim.SetBool("blocking", true);
+        else
+            GameManager.scriptPlayerCamera.anim.SetBool("blocking", false);
+
+    }
+
+    private void Update()
+    {
+        if (GameManager.scriptGameplay.onPc)
+            Block(Input.GetKey(KeyCode.E));
+
+    }
+
 
 }

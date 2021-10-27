@@ -7,7 +7,7 @@ public class ActionDodge : MonoBehaviour, IPointerClickHandler,IPointerDownHandl
 {
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameManager.scriptPlayer.Dodge();
+        Dodge();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -17,6 +17,22 @@ public class ActionDodge : MonoBehaviour, IPointerClickHandler,IPointerDownHandl
 
     public void OnPointerUp(PointerEventData eventData)
     {
+
+    }
+
+    public void Dodge()
+    {
+        if (GameManager.scriptPlayer.playerControl)
+            GameManager.scriptPlayer.Dodge();
+
+    }
+
+    private void Update()
+    {
+        if (GameManager.scriptGameplay.onPc)
+            if (Input.GetKeyDown(KeyCode.Space))
+                Dodge();
+
 
     }
 }

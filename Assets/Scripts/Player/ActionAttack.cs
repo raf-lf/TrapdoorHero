@@ -8,13 +8,27 @@ public class ActionAttack : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        GameManager.scriptPlayerCamera.anim.SetBool("attacking", true);
+        Attack(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        GameManager.scriptPlayerCamera.anim.SetBool("attacking", false);
+        Attack(false);
 
     }
 
+    public void Attack(bool on)
+    {
+        if (on && GameManager.scriptPlayer.playerControl)
+            GameManager.scriptPlayerCamera.anim.SetBool("attacking", true);
+        else
+            GameManager.scriptPlayerCamera.anim.SetBool("attacking", false);
+
+    }
+    private void Update()
+    {
+        if (GameManager.scriptGameplay.onPc)
+            Attack(Input.GetKey(KeyCode.Q));
+
+    }
 }

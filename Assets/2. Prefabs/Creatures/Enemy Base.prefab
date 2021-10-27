@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 5736116054521146270, guid: 4aa7f056e8df6814494ec5361c287270, type: 3}
   projectileOrigin: {fileID: 7638380520207023087}
-  attackCooldown: 2
+  attackCooldown: 4
 --- !u!1 &4081281534429994539
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4137564889727586267}
   - component: {fileID: 4137564889727586215}
+  - component: {fileID: 795760909511163074}
   - component: {fileID: 4137564889727586212}
   - component: {fileID: 3707476153860001047}
   - component: {fileID: 1316552994457740069}
@@ -255,6 +256,19 @@ MonoBehaviour:
   vfxDamage: {fileID: 287540725486323843}
   vfxHeal: {fileID: 1552880930355700619}
   damagedMaterial: {fileID: 2100000, guid: 6b08097c774a37f4a83214703de287af, type: 2}
+--- !u!114 &795760909511163074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4137564889727586214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 211bf1a807ee4fa4fa15e62c771a1060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreValue: 3
 --- !u!65 &4137564889727586212
 BoxCollider:
   m_ObjectHideFlags: 0

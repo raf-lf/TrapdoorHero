@@ -8,6 +8,13 @@ public class EnemyTurret : MonoBehaviour
     public Transform projectileOrigin;
     public float attackCooldown;
     private float attackCooldownTimer;
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponentInParent<Animator>();
+        attackCooldownTimer = Random.Range(attackCooldown * .75f, attackCooldown * .125f);
+    }
 
     public void AttackEffect()
     {
@@ -21,16 +28,17 @@ public class EnemyTurret : MonoBehaviour
 
     public void Attack()
     {
-        if (attackCooldownTimer == 0)
+        if (attackCooldownTimer > 0)
+            attackCooldownTimer = Mathf.Clamp(attackCooldownTimer - Time.deltaTime, 0, Mathf.Infinity);
+        else
         {
-            GetComponentInParent<Animator>().SetTrigger("attack");
+            animator.SetTrigger("attack");
+            attackCooldownTimer = attackCooldown;
         }
     }
 
     private void Update()
-    {
+    { 
         Attack();
-        if (attackCooldownTimer > 0)
-            attackCooldownTimer = Mathf.Clamp(attackCooldownTimer - Time.time, 0, Mathf.Infinity);
     }
 }

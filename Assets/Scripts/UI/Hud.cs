@@ -26,6 +26,13 @@ public class Hud : MonoBehaviour
     public TextMeshProUGUI buffShieldDuration;
     public Image buffShieldFill;
 
+    [Header("Other")]
+    public TextMeshProUGUI scoreText;
+
+    [Header("Overlay")]
+    public Animator overlayAnimator;
+    public Animator hudAnimator;
+
     private void Awake()
     {
         GameManager.scriptHud = this;
@@ -35,15 +42,28 @@ public class Hud : MonoBehaviour
     {
         connectedHealth = GameManager.scriptPlayer.GetComponent<Health>();
         connectedStamina = GameManager.scriptPlayer.GetComponent<Stamina>();
+        UpdateScore();
     }
 
     public void ChangeHP(float valueChange)
     {
         if (valueChange > 0)
+        {
             hpFill.GetComponentInParent<Animator>().SetTrigger("increase");
+            overlayAnimator.SetTrigger("heal");
+        }
 
         if (valueChange < 0)
+        {
             hpFill.GetComponentInParent<Animator>().SetTrigger("decrease");
+            overlayAnimator.SetTrigger("damage");
+        }
+
+        if(connectedHealth.hp <=  connectedHealth.hpMax * .33f)
+            overlayAnimator.SetBool("lowHp", true);
+        else
+            overlayAnimator.SetBool("lowHp", false);
+
 
     }
 
@@ -53,7 +73,10 @@ public class Hud : MonoBehaviour
             spFill.GetComponentInParent<Animator>().SetTrigger("increase");
 
         if (valueChange < 0)
+        {
             spFill.GetComponentInParent<Animator>().SetTrigger("decrease");
+            overlayAnimator.SetTrigger("block");
+        }
     }
 
     public void NoHP()
@@ -76,7 +99,18 @@ public class Hud : MonoBehaviour
 
         buffShieldFill.fillAmount = GameManager.scriptPlayer.buffShieldDurationCurrent / GameManager.scriptPlayer.buffShieldDuration;
         buffShieldDuration.text = (Mathf.RoundToInt(GameManager.scriptPlayer.buffShieldDurationCurrent).ToString());
+        
+    }
 
+    public void ChangeScore(int value)
+    {
+        GameManager.score += value;
+        UpdateScore();
+    }
+
+    public void UpdateScore()
+    {
+        scoreText.text = GameManager.score.ToString();
     }
 
     private void Update()

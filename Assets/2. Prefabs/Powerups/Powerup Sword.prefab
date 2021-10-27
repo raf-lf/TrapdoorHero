@@ -1305,9 +1305,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0, g: 0.8979101, b: 1, a: 1}
-        key1: {r: 0.1745283, g: 0.2544305, b: 1, a: 1}
-        key2: {r: 0.3443396, g: 0.8178236, b: 1, a: 0}
+        key0: {r: 1, g: 0, b: 0.07060623, a: 1}
+        key1: {r: 0.990566, g: 0.4999555, b: 0.67460114, a: 1}
+        key2: {r: 1, g: 0, b: 0.06640482, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -14611,7 +14611,7 @@ GameObject:
   m_Layer: 0
   m_Name: Powerup Sword
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -20847,8 +20847,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0}
-        key1: {r: 0, g: 0.8979101, b: 1, a: 1}
-        key2: {r: 0.1745283, g: 0.2544305, b: 1, a: 0}
+        key1: {r: 1, g: 0, b: 0.03997326, a: 1}
+        key2: {r: 0.8500154, g: 0.17647058, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -30523,8 +30523,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 0}
-        key1: {r: 0, g: 0.8979101, b: 1, a: 1}
-        key2: {r: 0.1745283, g: 0.2544305, b: 1, a: 0}
+        key1: {r: 1, g: 0, b: 0.16484308, a: 1}
+        key2: {r: 1, g: 0, b: 0.79383564, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}

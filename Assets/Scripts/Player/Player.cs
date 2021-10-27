@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool playerControl = false;
+
     [Header("Attack")]
     public int attackSpCost;
 
@@ -129,7 +131,7 @@ public class Player : MonoBehaviour
         {
             playerStamina.SpChange(-dodgeStaminaCost);
             GameManager.scriptPlayerCamera.anim.SetTrigger("dodge");
-            Camera.main.GetComponent<Animator>().SetTrigger("dodge");
+            GameManager.scriptGameplay.mainCamera.GetComponentInChildren<Animator>().SetTrigger("dodge");
         }
         else
             GameManager.scriptHud.NoSP();
@@ -144,6 +146,10 @@ public class Player : MonoBehaviour
 
     }
 
+    public void PlayerDeath()
+    {
+        GameManager.scriptPlayerCamera.anim.SetTrigger("death");
+    }
     private void DecayBuffs()
     {
         if (buffSwordDurationCurrent > 0)

@@ -7,12 +7,11 @@ public class Projectile : CauseDamage
 {
     public int projectileSpeed;
     public float selfDestroyTime;
-    private ParticleSystem particle;
+    public ParticleSystem vfxDestrucion;
 
     private void Start()
     {
         Destroy(gameObject, selfDestroyTime);
-        particle = GetComponentInChildren<ParticleSystem>();
     }
 
     public void Setup()
@@ -23,10 +22,10 @@ public class Projectile : CauseDamage
     
     public void Impact()
     {
-        if (particle != null)
+        if (vfxDestrucion != null)
         {
-            particle.Play();
-            particle.transform.parent = null;
+            vfxDestrucion.Play();
+            vfxDestrucion.transform.parent = null;
         }
         if (GetComponentInChildren<PlaySfx>())
             GetComponentInChildren<PlaySfx>().PlayInspectorSfx();

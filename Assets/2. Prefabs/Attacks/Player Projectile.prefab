@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d15c69d6e34554042a62d1658b568bcc, type: 2}
+  - {fileID: 2100000, guid: 4eec36a578a9d2b4596833175e045d8b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9949,7 +9949,7 @@ GameObject:
   - component: {fileID: 5919186362294888803}
   - component: {fileID: 8853675046226054312}
   - component: {fileID: 3095990154705095529}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9989,6 +9989,7 @@ MonoBehaviour:
   type: 0
   projectileSpeed: 50
   selfDestroyTime: 3
+  vfxDestrucion: {fileID: 3599437666337833400}
 --- !u!54 &5919186362294888803
 Rigidbody:
   m_ObjectHideFlags: 0
