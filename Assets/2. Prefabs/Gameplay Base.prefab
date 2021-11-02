@@ -243,23 +243,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onPc: 0
-  wave: 0
   mainCamera: {fileID: 3527977108880884099}
   cineCamera: {fileID: 8325196375524244039}
   roomCenter: {fileID: 7503731908846757416}
   trapdoorAnim: {fileID: 0}
-  enemyList:
-  - {fileID: 4137564889727586214, guid: 8811d1f93cbd65540a5c48c7287995a9, type: 3}
-  - {fileID: 4282479394157864193, guid: 6b729ad73f6c21b44837db3539bd9503, type: 3}
-  - {fileID: 6724087199379459428, guid: a6cd2bfe71392174bb6b3e69f019efcd, type: 3}
-  enemyValue: 05000000080000000f000000
-  totalValue: 50
-  availableValue: 0
-  maxEnemies: 10
+  music: {fileID: 8300000, guid: bed27e08bc35480439330668a5f0e9a0, type: 3}
+  floor: 1
+  totalSpawnValue: 5
+  availableSpawnValue: 0
+  spawnValuePerFloor: 3
+  maxEnemies: 3
+  floorMultipleEnemyIncrease: 5
   spawnedEnemies: 0
+  enemyList:
+  - {fileID: 4137564889727586214, guid: 1aab80bfe68d3f94f80974a30e328fb6, type: 3}
+  - {fileID: 4137564889727586214, guid: 53476350360230549b498de79d5535c2, type: 3}
+  - {fileID: 4137564889727586214, guid: e30aa27da711c4e43800fae285d29cf4, type: 3}
+  - {fileID: 4137564889727586214, guid: 5d7247303ff6314479612cd081fe83f0, type: 3}
+  enemyValue: 03000000060000000f0000001e000000
+  chestPrefab: {fileID: 4137564889727586214, guid: 4aeadcfce9f81504f9bb97228c712195, type: 3}
+  chestQty: 1
+  healingPowerup: {fileID: 5916447475044000854, guid: 63bd10aa898eec141b992a36102d98db, type: 3}
   spawnPointParent: {fileID: 390658330}
   enemyParent: {fileID: 121936828}
   spawnPoints: []
+  globalLight: {fileID: 0}
+  outsideAmbientColor:
+    serializedVersion: 2
+    rgba: 4285494919
+  insideAmbientColor:
+    serializedVersion: 2
+    rgba: 4278190080
 --- !u!1 &859244487
 GameObject:
   m_ObjectHideFlags: 0
@@ -20883,6 +20897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 5736116054521146270, guid: 9af4fc9b89ca17c4aa69c58cbf1b1732, type: 3}
   projectileOrigin: {fileID: 3527977109070613557}
+  pool: {fileID: 0}
 --- !u!114 &8129527196950817724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30579,6 +30594,7 @@ Transform:
   - {fileID: 1244780674556145171}
   - {fileID: 3527977110223451889}
   - {fileID: 3527977109633231678}
+  - {fileID: 7150765138342652658}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30907,6 +30923,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa9f610c888e724188e9985e5e9531b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8886323952803872375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7150765138342652658}
+  - component: {fileID: 2886838571983357905}
+  m_Layer: 0
+  m_Name: Pool Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7150765138342652658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8886323952803872375}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9201287762165632411}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2886838571983357905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8886323952803872375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6e3e959f4fea44ea8eecda7e3e42ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolPrefab: {fileID: 5313045473371840727, guid: 3b5720021a810bc45a00433dce3ee3b8, type: 3}
+  poolList: []
 --- !u!1001 &4501389980977547064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31002,6 +31063,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1353793077622084587, guid: 179aac51bf000b746a547112309d8501, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 179aac51bf000b746a547112309d8501, type: 3}
 --- !u!224 &3527977110223451889 stripped
@@ -31027,10 +31092,6 @@ PrefabInstance:
     - target: {fileID: 5551717767085894971, guid: 497f68aebf7bfa14e89f484018a39686, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5551717767085894972, guid: 497f68aebf7bfa14e89f484018a39686, type: 3}
-      propertyPath: hp
-      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 5551717767085894975, guid: 497f68aebf7bfa14e89f484018a39686, type: 3}
       propertyPath: m_RootOrder

@@ -28,6 +28,7 @@ public class Hud : MonoBehaviour
 
     [Header("Other")]
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI floorText;
 
     [Header("Overlay")]
     public Animator overlayAnimator;
@@ -112,7 +113,10 @@ public class Hud : MonoBehaviour
     {
         scoreText.text = GameManager.score.ToString();
     }
-
+    public void UpdateFloor()
+    {
+        floorText.text = GameManager.scriptGameplay.floor.ToString();
+    }
     private void Update()
     {
         UpdateValue();

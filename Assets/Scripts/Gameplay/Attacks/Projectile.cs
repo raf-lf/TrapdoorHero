@@ -7,39 +7,86 @@ public class Projectile : CauseDamage
 {
     public int projectileSpeed;
     public float selfDestroyTime;
-    public ParticleSystem vfxDestrucion;
+    private Animator anim;
+    public ParticleSystem vfxTravel;
+    public ParticleSystem vfxImpact;
+    public PlaySfx sfxBirth;
+    public PlaySfx sfxImpact;
+    public AudioSource loopSource;
 
     private void Start()
     {
-        Destroy(gameObject, selfDestroyTime);
+        StartCoroutine(SelfDestruct());
+
+    }
+
+    private IEnumerator SelfDestruct()
+    {
+        yield return new WaitForSeconds(selfDestroyTime);
+        StartCoroutine(Destroy(0));
+
+    }
+    public IEnumerator Destroy(float time)
+    {
+        yield return new WaitForSeconds(time);
+        GetComponentInParent<ObjectPool>().ReturnToPool(gameObject);
+
     }
 
     public void Setup()
     {
+        if(sfxBirth != null)
+            sfxBirth.PlayInspectorSfx();
+
+        EnableDisableProjectile(true);
         GetComponent<Rigidbody>().velocity = projectileSpeed * transform.forward;
 
     }
-    
+
     public void Impact()
     {
-        if (vfxDestrucion != null)
+        if (sfxImpact != null)
+            sfxImpact.PlayInspectorSfx();
+        if (vfxImpact != null)
+            vfxImpact.Play();
+        EnableDisableProjectile(false);
+        StopCoroutine(SelfDestruct());
+        StartCoroutine(Destroy(vfxImpact.main.duration));
+
+
+    }
+
+    private void EnableDisableProjectile(bool on)
+    {
+        foreach (var item in GetComponentsInChildren<MeshRenderer>())
         {
-            vfxDestrucion.Play();
-            vfxDestrucion.transform.parent = null;
+            item.enabled = on;
         }
-        if (GetComponentInChildren<PlaySfx>())
-            GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
+        GetComponent<Collider>().enabled = on;
+        GetComponent<Rigidbody>().isKinematic = !on;
 
-        Destroy(gameObject);
+        if (GetComponentInChildren<TrailRenderer>())
+            GetComponentInChildren<TrailRenderer>().Clear();
 
+        if (vfxTravel != null)
+        {
+            if (on)
+                vfxTravel.Play();
+            else
+                vfxTravel.Stop();
+        }
+
+        if(loopSource != null)
+        loopSource.enabled = on;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+       // Debug.Log(gameObject.name + " collided with " + collision.gameObject.name);
+        Impact();
         if (collision.gameObject.GetComponent<Health>())
         {
             Damage(collision.gameObject.GetComponent<Health>());
         }
-        Impact();
     }
 }

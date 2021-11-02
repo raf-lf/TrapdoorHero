@@ -9,7 +9,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        RenderSettings.ambientSkyColor = Color.white;
         anim = GetComponentInParent<Animator>();
         GameManager.scriptGameplay.cineCamera.SetActive(true);
         GameManager.scriptGameplay.mainCamera.SetActive(false);
@@ -18,20 +17,31 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        anim.SetTrigger("hide");
         GameManager.scriptGameplay.cineCamera.GetComponent<Animator>().SetTrigger("start");
         patchesAnim.SetTrigger("kick");
     }
 
-    public void Credits()
+    public void InvertBool(string animString)
     {
-        anim.SetBool("credits", !anim.GetBool("credits"));
-
+        anim.SetBool(animString, !anim.GetBool(animString));
+    }
+    public void SetBoolTrue(string animString)
+    {
+        anim.SetBool(animString, true);
+    }
+    public void SetBoolFalse(string animString)
+    {
+        anim.SetBool(animString, false);
     }
 
     public void LeaveGame()
     {
-        Application.Quit();
+        Invoke(nameof(Quit), 1.5f);
 
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     {
         GameManager.scriptHud.ChangeScore(scoreValue);
         GameManager.scriptGameplay.EnemyDown();
+        GetComponentInChildren<EnemyBehavior>().Death();
     }
 
 }

@@ -13,6 +13,8 @@ public class Health : MonoBehaviour
 
     public bool dead;
 
+    public PlaySfx sfxDamage;
+    //public PlaySfx sfxDeath;
     public ParticleSystem vfxDamage;
     public ParticleSystem vfxHeal;
 
@@ -38,6 +40,9 @@ public class Health : MonoBehaviour
                 value = GetComponent<Player>().DamagePlayer(value, attackType);
 
             HPChange(-value);
+
+            if(sfxDamage != null)
+            sfxDamage.PlayInspectorSfx();
         }
     }
 
@@ -85,17 +90,32 @@ public class Health : MonoBehaviour
 
     public void Death()
     {
+        /*
+        if(sfxDeath != null)
+            sfxDeath.PlayInspectorSfx();
+        */
+
         dead = true;
 
         if (GetComponent<Player>())
         {
             GameManager.scriptGameplay.PlayerDeath();
             GameManager.scriptPlayer.PlayerDeath();
+            gameObject.SetActive(false);
         }
-        if (GetComponent<Enemy>())
-            GetComponent<Enemy>().EnemyDeath();
 
-        gameObject.SetActive(false);
+        if (GetComponent<Enemy>())
+        {
+            GetComponent<Enemy>().EnemyDeath();
+            GetComponent<Animator>().SetTrigger("death");
+        }
+        else
+        {
+            GetComponent<Animator>().SetTrigger("death");
+
+        }
+
+        //gameObject.SetActive(false);
     }
 
     IEnumerator MaterialSwitch()

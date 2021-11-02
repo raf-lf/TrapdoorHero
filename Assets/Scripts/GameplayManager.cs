@@ -7,22 +7,34 @@ public class GameplayManager : MonoBehaviour
 {
     public bool onPc;
 
-    public int wave;
     [Header("Components")]
     public GameObject mainCamera;
     public GameObject cineCamera;
     public Transform roomCenter;
     public Animator trapdoorAnim;
+    public AudioClip music;
+
+    [Header("Difficulty")]
+    public int floor = 1;
+    public int totalSpawnValue;
+    [SerializeField]
+    private int availableSpawnValue;
+    public int spawnValuePerFloor;
+    public int maxEnemies;
+    public int floorMultipleEnemyIncrease;
+    [SerializeField]
+    private int spawnedEnemies;
 
     [Header("Enemies")]
     public GameObject[] enemyList = new GameObject[0];
     public int[] enemyValue = new int[0];
 
-    public int totalValue; 
-    [SerializeField]
-    private int availableValue;
-    public int maxEnemies;
-    public int spawnedEnemies;
+
+    [Header("Chests")]
+    public GameObject chestPrefab;
+    public int chestQty;
+    public GameObject healingPowerup;
+
 
     [Header("Spawn Points")]
     public Transform spawnPointParent;
@@ -30,22 +42,60 @@ public class GameplayManager : MonoBehaviour
     public List<Transform> spawnPoints = new List<Transform>();
     private List<Transform> availableSpawnPoints = new List<Transform>();
 
-    
+    [Header("Environment")]
+    public Light globalLight;
+    public Color32 outsideAmbientColor;
+    public Color32 insideAmbientColor;
+
+
+
     private void Awake()
     {
         GameManager.scriptGameplay = this;
         mainCamera.GetComponent<CameraMouse>().enabled = onPc;
         mainCamera.GetComponent<NewGyroCamera>().enabled = !onPc;
     }
+    private void Start()
+    {
+        ChangeAmbientColor(0);
+    }
 
     public void StartGame()
     {
+        GameManager.scriptHud.UpdateFloor();
         SetupSpawnPoints();
         SpawnEnemies();
+        SpawnChests();
         GameManager.scriptHud.hudAnimator.SetBool("hidden", false);
+        GameManager.scriptAudio.PlayBgm(music, 1);
 
     }
 
+    public void UpdateDifficulty()
+    {
+        totalSpawnValue += spawnValuePerFloor;
+
+        if (floor % floorMultipleEnemyIncrease == 0)
+            maxEnemies++;
+    }
+
+    public void ChangeAmbientColor(int ambient)
+    {
+        switch(ambient)
+        {
+            case 0:
+                RenderSettings.ambientSkyColor = outsideAmbientColor;
+                //RenderSettings.ambientSkyColor = Color.white;
+                globalLight.intensity = 1;
+                break;
+            case 1:
+                RenderSettings.ambientSkyColor = insideAmbientColor;
+                //RenderSettings.ambientSkyColor = Color.black;
+                globalLight.intensity = 0;
+                break;
+
+        }
+    }
     #region Enemy Spawn
     public void SetupSpawnPoints()
     {
@@ -61,7 +111,7 @@ public class GameplayManager : MonoBehaviour
     public void SpawnEnemies()
     {
         float lesserValue = Mathf.Infinity;
-        availableValue = totalValue;
+        availableSpawnValue = totalSpawnValue;
         spawnedEnemies = 0;
 
         for (int i = 0; i < enemyList.Length; i++)
@@ -75,18 +125,14 @@ public class GameplayManager : MonoBehaviour
 
         for (int i = maxEnemies; i > 0; i--)
         {
-            if (availableValue >= lesserValue)
+            if (availableSpawnPoints.Count > 0)
             {
-                int roll = Random.Range(0, enemyList.Length);
-
-                if (availableValue >= enemyValue[roll])
+                if (availableSpawnValue >= lesserValue)
                 {
-                    IndividualSpawn(roll);
-                    availableValue -= enemyValue[roll];
+                    IndividualSpawn(RollEnemy());
                     spawnedEnemies++;
-
-                 //   Debug.Log("Spawned " + spawnedEnemies + "." + "Remaining value is " + availableValue);
                 }
+                else break;
             }
             else break;
 
@@ -94,6 +140,23 @@ public class GameplayManager : MonoBehaviour
 
     }
 
+    public int RollEnemy()
+    {
+        int selectedId = 0;
+        int roll = Random.Range(0, enemyList.Length);
+
+        if (availableSpawnValue >= enemyValue[roll])
+        {
+            selectedId = roll;
+            availableSpawnValue -= enemyValue[roll];
+            return selectedId;
+        }
+        else
+        {
+            return RollEnemy();
+        }
+
+    }
     public void IndividualSpawn(int index)
     {
         GameObject spawnedEnemy = Instantiate(enemyList[index], enemyParent);
@@ -113,26 +176,90 @@ public class GameplayManager : MonoBehaviour
 
     #endregion
 
+    public void SpawnChests()
+    {
+        for (int i = chestQty; i > 0; i--)
+        {
+            if (availableSpawnPoints.Count > 0)
+            {
+                GameObject chest = Instantiate(chestPrefab, transform);
+
+                int roll = Random.Range(0, availableSpawnPoints.Count);
+
+                Transform[] temporaryArray = availableSpawnPoints.ToArray();
+
+                chest.transform.position = temporaryArray[roll].position;
+                chest.transform.LookAt(roomCenter.transform);
+
+                availableSpawnPoints.RemoveAt(roll);
+            }
+            else break;
+
+            if (availableSpawnPoints.Count > 0 && floor % 5 == 0)
+            {
+                GameObject heal = Instantiate(healingPowerup, transform);
+
+                int roll = Random.Range(0, availableSpawnPoints.Count);
+
+                Transform[] temporaryArray = availableSpawnPoints.ToArray();
+
+                heal.transform.position = temporaryArray[roll].position;
+                heal.transform.LookAt(roomCenter.transform);
+
+                availableSpawnPoints.RemoveAt(roll);
+            }
+        }
+
+    }
+
+    public void CkearFloor()
+    {
+        foreach (var item in enemyParent.GetComponentsInChildren<Enemy>())
+        {
+            Destroy(item.gameObject);
+        }
+        foreach (var item in transform.parent.GetComponentsInChildren<RandomObjectSpawner>())
+        {
+            Destroy(item.gameObject);
+
+        }
+        foreach (var item in transform.parent.GetComponentsInChildren<Powerup>())
+        {
+            Destroy(item.gameObject);
+
+        }
+    }
+
     public void EnemyDown()
     {
         spawnedEnemies--;
 
         if (spawnedEnemies <= 0)
         {
-            wave++;
-            cineCamera.transform.rotation = mainCamera.transform.rotation;
-            cineCamera.SetActive(true);
-            mainCamera.SetActive(false);
-            cineCamera.GetComponent<Animator>().SetTrigger("fall");
-            GameManager.scriptPlayer.playerControl = false;
-            trapdoorAnim.SetBool("open", true);
+            Invoke(nameof(FloorCompleted), 1.5f);
         }
     }
 
-    public void NextWave()
+    public void FloorCompleted()
     {
+        cineCamera.transform.rotation = mainCamera.transform.rotation;
+        cineCamera.SetActive(true);
+        mainCamera.SetActive(false);
+        cineCamera.GetComponent<Animator>().SetTrigger("fall");
+        GameManager.scriptPlayer.playerControl = false;
+        trapdoorAnim.SetBool("open", true);
+
+    }
+    public void NextFloor()
+    {
+        floor++;
+        GameManager.scriptHud.UpdateFloor();
+
+        UpdateDifficulty();
+        CkearFloor();
         SetupSpawnPoints();
         SpawnEnemies();
+        SpawnChests();
     }
     public void ReturnCamera()
     {
@@ -144,6 +271,7 @@ public class GameplayManager : MonoBehaviour
 
     public void PlayerDeath()
     {
+        GameManager.scriptAudio.FadeBgm(0, .05f);
         GameManager.scriptHud.hudAnimator.SetBool("hidden", true);
         GameManager.scriptPlayer.playerControl = false;
         cineCamera.SetActive(true);

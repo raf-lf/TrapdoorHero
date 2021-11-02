@@ -28,7 +28,7 @@ public class ActionBlock : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Update()
     {
         if (GameManager.scriptGameplay.onPc)
-            Block(Input.GetKey(KeyCode.E));
+            Block(Input.GetKey(KeyCode.Q));
 
     }
 

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class RandomObjectSpawner : MonoBehaviour
 {
+    [Header("Config")]
+    public bool activateOnStart;
+    public Vector3 spawnOffset;
+
+    [Header("Tables")]
     public int copies = 1;
     public int timesToRun = 1;
     //public Dictionary<GameObject, float> table = new Dictionary<GameObject, float>();
@@ -13,9 +18,11 @@ public class RandomObjectSpawner : MonoBehaviour
     private float[] objectDrawWeight;
 
 
+
     protected virtual void Start()
     {
-        Activate();
+        if(activateOnStart)
+            Activate();
 
     }
 
@@ -26,7 +33,7 @@ public class RandomObjectSpawner : MonoBehaviour
         for (int i = timesToRun; i > 0; i--)
             Spawn(Draw());
 
-        Destroy(gameObject, 5);
+       // Destroy(gameObject, 5);
 
     }
 
@@ -71,7 +78,7 @@ public class RandomObjectSpawner : MonoBehaviour
             if (objectTable[i] != null)
             {
                 GameObject spawnedObject = Instantiate(objectTable[objectId], transform);
-                spawnedObject.transform.position += new Vector3(Random.Range(-.5f,.5f), Random.Range(-.5f, .5f),0);
+                spawnedObject.transform.position += spawnOffset;
                 spawnedObject.transform.parent = transform.parent;
             }
         }

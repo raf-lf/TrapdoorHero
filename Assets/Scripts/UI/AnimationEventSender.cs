@@ -6,6 +6,6 @@ public class AnimationEventSender : MonoBehaviour
 {
     public void Attack()
     {
-        GetComponentInChildren<EnemyTurret>().AttackEffect();
+        GetComponentInChildren<EnemyBehavior>().AttackEffect();
     }
 }

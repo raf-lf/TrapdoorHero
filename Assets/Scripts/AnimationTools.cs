@@ -6,7 +6,12 @@ public class AnimationTools: MonoBehaviour
 {
     public void PlaySfx(AudioClip clip)
     {
-        GameManager.scriptAudio.PlaySfx(clip, 1, Vector2.one);
+        AudioSource source = null;
+
+        if(GetComponentInChildren<AudioSource>() != null)
+            source = GetComponentInChildren<AudioSource>();
+        
+        GameManager.scriptAudio.PlaySfx(clip, 1, Vector2.one, source);
     }
 
     public void PlayerControlOn()
@@ -25,7 +30,7 @@ public class AnimationTools: MonoBehaviour
 
     public void NextWave()
     {
-        GameManager.scriptGameplay.NextWave();
+        GameManager.scriptGameplay.NextFloor();
     }
 
     public void ReturnCamera()
@@ -35,6 +40,6 @@ public class AnimationTools: MonoBehaviour
 
     public void Darken()
     {
-        RenderSettings.ambientSkyColor = Color.black;
+        GameManager.scriptGameplay.ChangeAmbientColor(1);
     }
 }

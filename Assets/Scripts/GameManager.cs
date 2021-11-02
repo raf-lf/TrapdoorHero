@@ -11,6 +11,7 @@ public static class GameManager
     public static Hud scriptHud;
     public static AudioManager scriptAudio;
     public static GameplayManager scriptGameplay;
+    public static PoolManager scriptPool;
        
 
 }
