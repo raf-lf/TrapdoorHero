@@ -10,8 +10,6 @@ public class TriggerAttack : CauseDamage
         {
             Damage(other.gameObject.GetComponent<Health>());
 
-            if (GetComponentInChildren<PlaySfx>())
-                GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
         }
 
     }

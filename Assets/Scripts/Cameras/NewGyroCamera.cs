@@ -4,41 +4,41 @@ using UnityEngine;
 
 public class NewGyroCamera : MonoBehaviour
 {
-        private bool gyroEnabled = true;
-        private Gyroscope gyro;
+    private bool gyroEnabled = true;
+    private Gyroscope gyro;
 
-        private GameObject cameraContainer;
-        private Quaternion rot;
+    private GameObject cameraContainer;
+    private Quaternion rot;
 
-        private void Start()
-        {
-            cameraContainer = new GameObject("Camera Container");
-            cameraContainer.transform.position = transform.position;
-            transform.SetParent(cameraContainer.transform);
+    private void Start()
+    {
+        cameraContainer = new GameObject("Camera Container");
+        cameraContainer.transform.position = transform.position;
+        transform.SetParent(cameraContainer.transform);
 
-            gyroEnabled = EnableGyro();
-        }
+        gyroEnabled = EnableGyro();
+    }
     
-        private bool EnableGyro()
+    private bool EnableGyro()
+    {
+        if (SystemInfo.supportsGyroscope)
         {
-            if (SystemInfo.supportsGyroscope)
-            {
-                gyro = Input.gyro;
-                gyro.enabled = true;
+            gyro = Input.gyro;
+            gyro.enabled = true;
 
-                cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
-                rot = new Quaternion(0, 0, 1, 0);
+            cameraContainer.transform.rotation = Quaternion.Euler(90f, 90f, 0f);
+            rot = new Quaternion(0, 0, 1, 0);
 
-                return true;
-            }
-            return false;
+            return true;
         }
+        return false;
+    }   
     
-        private void Update()
+    private void Update()
+    {
+        if (gyroEnabled)
         {
-            if (gyroEnabled)
-            {
-                transform.localRotation = gyro.attitude * rot;
-            }
+            transform.localRotation = gyro.attitude * rot;
         }
+    }
 }

@@ -5,15 +5,33 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static float volumeSfxModifier = .5f;
-    public static float volumsBgmModifier = .5f;
+    public static float volumeBgmModifier = .5f;
+    public float volumeSfxFadeModifier = 1;
+    public float volumeBgmFadeModifier = 1;
     public static float volumeCurrentBgm = 1;
+    public static float volumeCurrentSfx = 1;
     public AudioSource sfxSource;
     public AudioSource bgmSource;
+    
+    /*
+    public delegate void volumeDelegate();
+    public static volumeDelegate volumeChangedEvent;
+    */
+
 
 
     public void Awake()
     {
         GameManager.scriptAudio = this;
+    }
+
+    public float ReturnBgmVolume()
+    {
+        return volumeCurrentBgm * volumeBgmModifier * volumeBgmFadeModifier;
+    }
+    public float ReturnSfxVolume()
+    {
+        return volumeCurrentSfx * volumeSfxModifier * volumeSfxFadeModifier;
     }
 
     public void PlaySfx(AudioClip clip, float volume, Vector2 pitchVariance, AudioSource source)
@@ -23,7 +41,9 @@ public class AudioManager : MonoBehaviour
         if (source != null) 
             usedSource = source;
 
-        usedSource.volume = volume * volumeSfxModifier;
+        volumeCurrentSfx = volume;
+
+        usedSource.volume = ReturnSfxVolume();
         usedSource.pitch = Random.Range(pitchVariance.x, pitchVariance.y);
         usedSource.PlayOneShot(clip);
 
@@ -32,7 +52,7 @@ public class AudioManager : MonoBehaviour
     public void PlayBgm(AudioClip music, float volume)
     {
         volumeCurrentBgm = volume;
-        bgmSource.volume = volumeCurrentBgm * volumsBgmModifier;
+        bgmSource.volume = ReturnBgmVolume();
         bgmSource.clip = music;
         bgmSource.Play();
 
@@ -41,23 +61,50 @@ public class AudioManager : MonoBehaviour
     public void FadeBgm(float volume, float volumeChange)
     {
         StopAllCoroutines();
-        StartCoroutine(FadeCoroutine(volume, volumeChange));
+        StopCoroutine(FadeBgmCoroutine(volume, volumeChange));
+        StartCoroutine(FadeBgmCoroutine(volume, volumeChange));
     }
 
-    public IEnumerator FadeCoroutine (float volume, float volumeChange)
+    public IEnumerator FadeBgmCoroutine (float setFadeValue, float gradualChange)
     {
-        while (volumeCurrentBgm != volume)
+        while (volumeBgmFadeModifier != setFadeValue)
         {
-            if (volumeCurrentBgm > volume)
-                volumeCurrentBgm = Mathf.Clamp(volumeCurrentBgm - volumeChange, volume, 1);
-            else if (volumeCurrentBgm < volume)
-                volumeCurrentBgm = Mathf.Clamp(volumeCurrentBgm + volumeChange, 0, volume);
+            if (volumeBgmFadeModifier > setFadeValue)
+                volumeBgmFadeModifier = Mathf.Clamp(volumeBgmFadeModifier - gradualChange, setFadeValue, 1);
+            else if (volumeBgmFadeModifier < setFadeValue)
+                volumeBgmFadeModifier = Mathf.Clamp(volumeBgmFadeModifier + gradualChange, 0, setFadeValue);
 
-            bgmSource.volume = volumeCurrentBgm;
+            bgmSource.volume = ReturnBgmVolume();
 
             yield return new WaitForSeconds(.1F);
 
-            if (volumeCurrentBgm == volume)
+            if (volumeBgmFadeModifier == setFadeValue)
+                break;
+
+        }
+
+    }
+
+    public void FadeSfx(float volume, float volumeChange)
+    {
+        StopCoroutine(FadeSfxCoroutine(volume, volumeChange));
+        StartCoroutine(FadeSfxCoroutine(volume, volumeChange));
+    }
+
+    public IEnumerator FadeSfxCoroutine(float setFadeValue, float gradualChange)
+    {
+        while (volumeSfxFadeModifier != setFadeValue)
+        {
+            if (volumeSfxFadeModifier > setFadeValue)
+                volumeSfxFadeModifier = Mathf.Clamp(volumeSfxFadeModifier - gradualChange, setFadeValue, 1);
+            else if (volumeSfxFadeModifier < setFadeValue)
+                volumeSfxFadeModifier = Mathf.Clamp(volumeSfxFadeModifier + gradualChange, 0, setFadeValue);
+
+           // volumeChangedEvent();
+
+            yield return new WaitForSeconds(.1F);
+
+            if (volumeSfxFadeModifier == setFadeValue)
                 break;
 
         }

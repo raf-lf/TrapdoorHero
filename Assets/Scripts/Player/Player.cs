@@ -36,8 +36,8 @@ public class Player : MonoBehaviour
     public float buffShieldDuration = 30;
     [HideInInspector]
     public float buffShieldDurationCurrent;
-    public float buffStaminaCostPerDamageBlock = 1;
-    public float buffDamageReduction = 1;
+    public float buffStaminaCostPerDamageBlock;
+    public float buffDamageReduction;
 
 
     private Health playerHealth;
@@ -98,29 +98,36 @@ public class Player : MonoBehaviour
 
     public void BuffSword(bool apply)
     {
-        GameManager.scriptHud.buffSwordFill.transform.parent.gameObject.SetActive(apply);
-
         buffSwordDurationCurrent = buffSwordDuration;
         GameManager.scriptPlayerCamera.anim.SetBool("buffAttack", apply);
+
+        GameManager.scriptHud.buffSwordFill.transform.parent.gameObject.SetActive(apply);
         GameManager.scriptPlayerCamera.BuffVfx(GameManager.scriptPlayerCamera.vfxMagicWeapon, apply);
     }
 
     public void BuffShield(bool apply)
     {
-        GameManager.scriptHud.buffShieldFill.transform.parent.gameObject.SetActive(apply);
-
         if (apply)
         {
-            buffShieldDurationCurrent = buffShieldDuration;
-            staminaCostPerDamageBlockExtra += buffStaminaCostPerDamageBlock;
-            modifierReduction += buffDamageReduction;
+            //Don't apply buff mechanic effects if buff is already active
+            if (buffShieldDurationCurrent > 0)
+                buffShieldDurationCurrent = buffShieldDuration;
+
+            else
+            {
+                buffShieldDurationCurrent = buffShieldDuration;
+                staminaCostPerDamageBlockExtra += buffStaminaCostPerDamageBlock;
+                modifierReduction += buffDamageReduction;
+            }
         }
         else
         {
             staminaCostPerDamageBlockExtra -= buffStaminaCostPerDamageBlock;
             modifierReduction -= buffDamageReduction;
+            //Debug.Log("Shield Buff Ended");
         }
 
+        GameManager.scriptHud.buffShieldFill.transform.parent.gameObject.SetActive(apply);
         GameManager.scriptPlayerCamera.BuffVfx(GameManager.scriptPlayerCamera.vfxMagicShield, apply);
 
     }

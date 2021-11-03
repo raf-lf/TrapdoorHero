@@ -248,7 +248,7 @@ MonoBehaviour:
   roomCenter: {fileID: 7503731908846757416}
   trapdoorAnim: {fileID: 0}
   music: {fileID: 8300000, guid: bed27e08bc35480439330668a5f0e9a0, type: 3}
-  floor: 1
+  floor: 0
   totalSpawnValue: 5
   availableSpawnValue: 0
   spawnValuePerFloor: 3
@@ -30643,6 +30643,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75068202030ce1a4f8311309208877fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  volumeSfxFadeModifier: 1
+  volumeBgmFadeModifier: 1
   sfxSource: {fileID: 2182721232099234392}
   bgmSource: {fileID: 7066057259355052701}
 --- !u!1 &8082097781810299278

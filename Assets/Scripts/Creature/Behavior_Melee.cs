@@ -15,8 +15,6 @@ public class Behavior_Melee : EnemyBehavior
         if (vfxAttack != null)
             vfxAttack.Play();
 
-        if (GetComponentInChildren<PlaySfx>())
-            GetComponentInChildren<PlaySfx>().PlayInspectorSfx();
     }
     public void SetMove(bool on)
     {

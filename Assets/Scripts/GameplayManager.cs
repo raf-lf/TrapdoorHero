@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
+    [HideInInspector]
     public bool onPc;
 
     [Header("Components")]
@@ -15,7 +16,7 @@ public class GameplayManager : MonoBehaviour
     public AudioClip music;
 
     [Header("Difficulty")]
-    public int floor = 1;
+    public int floor = 0;
     public int totalSpawnValue;
     [SerializeField]
     private int availableSpawnValue;
@@ -52,16 +53,48 @@ public class GameplayManager : MonoBehaviour
     private void Awake()
     {
         GameManager.scriptGameplay = this;
-        mainCamera.GetComponent<CameraMouse>().enabled = onPc;
-        mainCamera.GetComponent<NewGyroCamera>().enabled = !onPc;
+
+        bool gyroAvailable;
+
+        //gyroAvailable = SystemInfo.supportsGyroscope;
+        if (SystemInfo.deviceType == DeviceType.Desktop)
+            gyroAvailable = false;
+        else 
+            gyroAvailable = true;
+
+        Debug.Log("Gyroscope Availability: " + gyroAvailable);
+
+        onPc = !gyroAvailable;
+        mainCamera.GetComponent<CameraMouse>().enabled = !gyroAvailable;
+        mainCamera.GetComponent<NewGyroCamera>().enabled = gyroAvailable;
     }
     private void Start()
     {
         ChangeAmbientColor(0);
+        GameManager.scriptPlayer.playerControl = false;
+    }
+
+    public void ChangeAmbientColor(int ambient)
+    {
+        switch (ambient)
+        {
+            case 0:
+                RenderSettings.ambientSkyColor = outsideAmbientColor;
+                //RenderSettings.ambientSkyColor = Color.white;
+                globalLight.intensity = 1;
+                break;
+            case 1:
+                RenderSettings.ambientSkyColor = insideAmbientColor;
+                //RenderSettings.ambientSkyColor = Color.black;
+                globalLight.intensity = 0;
+                break;
+
+        }
     }
 
     public void StartGame()
     {
+        floor++;
         GameManager.scriptHud.UpdateFloor();
         SetupSpawnPoints();
         SpawnEnemies();
@@ -79,23 +112,7 @@ public class GameplayManager : MonoBehaviour
             maxEnemies++;
     }
 
-    public void ChangeAmbientColor(int ambient)
-    {
-        switch(ambient)
-        {
-            case 0:
-                RenderSettings.ambientSkyColor = outsideAmbientColor;
-                //RenderSettings.ambientSkyColor = Color.white;
-                globalLight.intensity = 1;
-                break;
-            case 1:
-                RenderSettings.ambientSkyColor = insideAmbientColor;
-                //RenderSettings.ambientSkyColor = Color.black;
-                globalLight.intensity = 0;
-                break;
 
-        }
-    }
     #region Enemy Spawn
     public void SetupSpawnPoints()
     {
@@ -212,7 +229,7 @@ public class GameplayManager : MonoBehaviour
 
     }
 
-    public void CkearFloor()
+    public void ClearFloor()
     {
         foreach (var item in enemyParent.GetComponentsInChildren<Enemy>())
         {
@@ -256,7 +273,7 @@ public class GameplayManager : MonoBehaviour
         GameManager.scriptHud.UpdateFloor();
 
         UpdateDifficulty();
-        CkearFloor();
+        ClearFloor();
         SetupSpawnPoints();
         SpawnEnemies();
         SpawnChests();
@@ -272,6 +289,8 @@ public class GameplayManager : MonoBehaviour
     public void PlayerDeath()
     {
         GameManager.scriptAudio.FadeBgm(0, .05f);
+        GameManager.scriptAudio.FadeSfx(0, .05f);
+
         GameManager.scriptHud.hudAnimator.SetBool("hidden", true);
         GameManager.scriptPlayer.playerControl = false;
         cineCamera.SetActive(true);
@@ -280,12 +299,36 @@ public class GameplayManager : MonoBehaviour
         GameManager.scriptHud.overlayAnimator.SetTrigger("death");
         Invoke(nameof(ReloadScene), 5);
 
+        UpdateRecords();
     }
 
+    public void UpdateRecords()
+    {
+
+        if (PlayerPrefs.HasKey("topScore"))
+        {
+            if (GameManager.score > PlayerPrefs.GetInt("topScore"))
+                PlayerPrefs.SetInt("topScore", GameManager.score);
+        }
+        else
+            PlayerPrefs.SetInt("topScore", GameManager.score);
+
+        if (PlayerPrefs.HasKey("topFloor"))
+        {
+            if (floor > PlayerPrefs.GetInt("topFloor"))
+                PlayerPrefs.SetInt("topFloor", floor);
+        }
+        else
+            PlayerPrefs.SetInt("topFloor", floor);
+    }
     public void ReloadScene()
     {
         GameManager.score = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
+    private void OnApplicationQuit()
+    {
+        UpdateRecords();
+    }
 }

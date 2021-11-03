@@ -34,6 +34,11 @@ public class Hud : MonoBehaviour
     public Animator overlayAnimator;
     public Animator hudAnimator;
 
+    [Header("Pause")]
+    public GameObject pauseOverlay;
+    public AudioClip sfxPause;
+    public AudioClip sfxUnpause;
+
     private void Awake()
     {
         GameManager.scriptHud = this;
@@ -109,6 +114,28 @@ public class Hud : MonoBehaviour
         UpdateScore();
     }
 
+    public void PauseUnpauseGame(bool pause)
+    {
+        pauseOverlay.SetActive(pause);
+        GetComponent<Animator>().SetBool("hidden", pause);
+
+        AudioClip clip;
+
+        if (pause)
+        {
+            Time.timeScale = 0;
+            clip = sfxPause;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            clip = sfxUnpause;
+        }
+
+        GameManager.scriptAudio.PlaySfx(clip, 1, new Vector2(.9f, 1.1f), null);
+
+            
+    }
     public void UpdateScore()
     {
         scoreText.text = GameManager.score.ToString();

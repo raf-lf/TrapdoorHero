@@ -103,8 +103,7 @@ public class Health : MonoBehaviour
             GameManager.scriptPlayer.PlayerDeath();
             gameObject.SetActive(false);
         }
-
-        if (GetComponent<Enemy>())
+        else if (GetComponent<Enemy>())
         {
             GetComponent<Enemy>().EnemyDeath();
             GetComponent<Animator>().SetTrigger("death");
@@ -112,10 +111,8 @@ public class Health : MonoBehaviour
         else
         {
             GetComponent<Animator>().SetTrigger("death");
-
         }
 
-        //gameObject.SetActive(false);
     }
 
     IEnumerator MaterialSwitch()
