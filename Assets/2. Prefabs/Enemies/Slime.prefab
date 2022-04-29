@@ -14744,7 +14744,7 @@ MonoBehaviour:
   sfxDamage: {fileID: 2265625748592468031}
   vfxDamage: {fileID: 287540725486323843}
   vfxHeal: {fileID: 1552880930355700619}
-  damagedMaterial: {fileID: 2100000, guid: 6b08097c774a37f4a83214703de287af, type: 2}
+  damagedMaterial: {fileID: 2100000, guid: 826bc779b4cab564aa1fe11d454f0088, type: 2}
 --- !u!114 &795760909511163074
 MonoBehaviour:
   m_ObjectHideFlags: 0

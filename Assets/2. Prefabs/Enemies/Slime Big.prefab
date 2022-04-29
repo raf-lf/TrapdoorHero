@@ -27,6 +27,10 @@ PrefabInstance:
       propertyPath: hp
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 4137564889727586215, guid: 1aab80bfe68d3f94f80974a30e328fb6, type: 3}
+      propertyPath: damagedMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 826bc779b4cab564aa1fe11d454f0088, type: 2}
     - target: {fileID: 4137564889727586267, guid: 1aab80bfe68d3f94f80974a30e328fb6, type: 3}
       propertyPath: m_RootOrder
       value: 0
